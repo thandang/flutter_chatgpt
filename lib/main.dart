@@ -14,7 +14,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.black,
   ));
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
 
   await GetStorage.init();
   await ChatGPT.initChatGPT();

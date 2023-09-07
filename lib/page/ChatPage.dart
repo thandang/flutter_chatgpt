@@ -159,7 +159,7 @@ class _ChatPageState extends State<ChatPage> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Row(
+              child: const Row(
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,7 +167,7 @@ class _ChatPageState extends State<ChatPage> {
                       SizedBox(
                         height: 60,
                         child: Row(
-                          children: const [
+                          children: [
                             SizedBox(width: 24),
                             Image(
                               width: 18,

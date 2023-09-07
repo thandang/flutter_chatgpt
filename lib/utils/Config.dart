@@ -1,15 +1,12 @@
 import 'package:aichat/utils/Chatgpt.dart';
 
 class Config {
-  static late Config _instance = Config._();
+  static final Config _instance = Config._();
   factory Config() => _getInstance();
   static Config get instance => _getInstance();
   Config._() {}
 
   static Config _getInstance() {
-    if (_instance == null) {
-      _instance = Config._();
-    }
     return _instance;
   }
 
