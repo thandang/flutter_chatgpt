@@ -1,4 +1,4 @@
-package com.wewehao.aichat
+package com.ryl.chatai
 
 import io.flutter.embedding.android.FlutterActivity
 
