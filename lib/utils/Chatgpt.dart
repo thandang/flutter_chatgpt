@@ -20,7 +20,7 @@ class ChatGPT {
 
   static String chatGptToken =
       dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
-  static String defaultModel = 'gpt-3.5-turbo';
+  static String defaultModel = 'gpt-4-0314';//'gpt-3.5-turbo';
   static List defaultRoles = [
     'system',
     'user',
