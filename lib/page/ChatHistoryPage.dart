@@ -1,3 +1,4 @@
+import 'package:aichat/models/chatInfo.dart';
 import 'package:aichat/page/ChatPage.dart';
 import 'package:aichat/page/SettingPage.dart';
 import 'package:aichat/utils/Config.dart';
@@ -53,8 +54,8 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
               child: SizedBox(
                 height: 60,
                 child: Row(
-                  children: const [
-                    SizedBox(width: 24),
+                  children: [
+                    SizedBox(width: 15),
                     Image(
                       width: 18,
                       image: AssetImage('images/back_icon.png'),
@@ -63,8 +64,8 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                     Text(
                       "History",
                       style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontSize: 18,
+                        color: const Color.fromRGBO(0, 0, 0, 1),
+                        fontSize: Config.headerBarFontSize,
                         height: 1,
                         fontWeight: FontWeight.bold,
                       ),
@@ -129,14 +130,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
       onTap: () {
         final store = Provider.of<AIChatStore>(context, listen: false);
         store.fixChatList();
-        Utils.jumpPage(
-          context,
-          ChatPage(
-            chatId: chat['id'],
-            autofocus: false,
-            chatType: chat['ai']['type'],
-          ),
-        );
+        Navigator.pop(context, ChatInfo(chat['id'], true, chat['ai']['type']));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,13 +204,13 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
           title: const Text('Confirm deletion?'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Config.mainColor,fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
             TextButton(
-              child: const Text('Confirm'),
+              child: Text('Confirm', style: TextStyle(color: Config.mainColor)),
               onPressed: () async {
                 await store.deleteChatById(chatId);
                 Navigator.of(context).pop(true);

@@ -12,6 +12,8 @@ import 'package:aichat/stores/AIChatStore.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/chatInfo.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -54,14 +56,8 @@ class _HomePageState extends State<HomePage> {
   void _handleClickModel(Map chatModel) {
     final store = Provider.of<AIChatStore>(context, listen: false);
     store.fixChatList();
-    Utils.jumpPage(
-      context,
-      ChatPage(
-        chatId: const Uuid().v4(),
-        autofocus: true,
-        chatType: chatModel['type'],
-      ),
-    );
+    Navigator.pop(
+        context, ChatInfo(const Uuid().v4(), true, chatModel['type']));
   }
 
   void handleClickInput() async {
@@ -87,44 +83,45 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: 60,
         automaticallyImplyLeading: false,
         titleSpacing: 0,
-        title: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(width: 24),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30.0),
-              clipBehavior: Clip.antiAlias,
-              child: const Image(
-                width: 36,
-                height: 36,
-                image: AssetImage('images/logo.png'),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              Config.appName,
-              style: const TextStyle(
-                color: Color.fromRGBO(54, 54, 54, 1.0),
-                fontSize: 18,
-                height: 1,
+            InkWell(
+              splashColor: Colors.white,
+              highlightColor: Colors.white,
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: SizedBox(
+                height: 60,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 15),
+                    const Image(
+                      width: 18,
+                      image: AssetImage('images/back_icon.png'),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      "Models",
+                      style: TextStyle(
+                        color: const Color.fromRGBO(0, 0, 0, 1),
+                        fontSize: Config.headerBarFontSize,
+                        height: 1,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 24),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         backgroundColor: Colors.white,
         elevation: 0.5,
-        actions: [
-          const SizedBox(width: 6),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            iconSize: 32,
-            color: const Color.fromRGBO(98, 98, 98, 1.0),
-            onPressed: () {
-              // ChatGPT.genImage('Robot avatar, cute');
-              Utils.jumpPage(context, const SettingPage());
-            },
-          ),
-          const SizedBox(width: 8),
+        actions: const [
+          SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
@@ -135,51 +132,11 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (store.homeHistoryList.length > 0)
-                      _renderTitle(
-                        'History',
-                        rightContent: SizedBox(
-                          width: 45,
-                          child: GestureDetector(
-                            onTap: () {
-                              Utils.jumpPage(context, const ChatHistoryPage());
-                            },
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'All',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    height: 18 / 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                  height: 16,
-                                  child: const Image(
-                                    image: AssetImage('images/arrow_icon.png'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (store.homeHistoryList.length > 0)
-                      _renderChatListWidget(
-                        store.homeHistoryList,
-                      ),
-                    _renderTitle('Chat Model'),
                     _renderChatModelListWidget(),
                   ],
                 ),
               ),
             ),
-            _renderBottomInputWidget(),
           ],
         ),
       ),
@@ -246,7 +203,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(229, 245, 244, 1),
+                color: Config.supperLightMainColor,
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Row(

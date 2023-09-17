@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:aichat/page/ChatPage.dart';
 import 'package:aichat/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:aichat/page/HomePage.dart';
+import 'package:uuid/uuid.dart';
 import '../utils/Config.dart';
 
 class SplashPage extends StatefulWidget {
@@ -37,7 +39,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       if (status == AnimationStatus.completed) {
         _lottieController.stop();
         _showAppOpenAnimate = false;
-        Utils.pushReplacement(context, const HomePage());
+        Utils.pushReplacement(
+            context,
+            ChatPage(
+                chatId: const Uuid().v4(), autofocus: true, chatType: "chat"));
       }
     });
     _splashLottie = Lottie.asset(

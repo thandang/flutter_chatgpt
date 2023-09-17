@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aichat/stores/AIChatStore.dart';
 import 'package:aichat/utils/Chatgpt.dart';
 import 'package:aichat/utils/Config.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,8 +22,10 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
   bool isCopying = false;
-  final TextEditingController _keyTextEditingController = TextEditingController();
-  final TextEditingController _urlTextEditingController = TextEditingController();
+  final TextEditingController _keyTextEditingController =
+      TextEditingController();
+  final TextEditingController _urlTextEditingController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -69,18 +74,18 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
               child: SizedBox(
                 height: 60,
                 child: Row(
-                  children: const [
-                    SizedBox(width: 24),
-                    Image(
+                  children: [
+                    const SizedBox(width: 15),
+                    const Image(
                       width: 18,
                       image: AssetImage('images/back_icon.png'),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text(
-                      "Setting",
+                      "Settings",
                       style: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 1),
-                        fontSize: 18,
+                        color: const Color.fromRGBO(0, 0, 0, 1),
+                        fontSize: Config.headerBarFontSize,
                         height: 1,
                         fontWeight: FontWeight.bold,
                       ),
@@ -109,17 +114,23 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                     32,
                     'Privacy Policy',
                     () {
-                      final Uri url = Uri.parse('https://wewehao.github.io/Privacy/privacy.html');
+                      final Uri url = Uri.parse('https://flutter.dev');
                       Utils.launchURL(url);
                     },
                   ),
-                  // renderItemWidget('images/share_icon.png', Colors.green, 26, 'Share App', () {
-                  //   Share.share(
-                  //     Platform.isAndroid
-                  //         ? 'https://play.google.com/store/apps/details?id=com.wewehao.aichat'
-                  //         : "https://apps.apple.com/app/id***",
-                  //   );
-                  // },),
+                  renderItemWidget(
+                    'images/share_icon.png',
+                    Colors.green,
+                    26,
+                    'Share App',
+                    () {
+                      Share.share(
+                        Platform.isAndroid
+                            ? 'https://play.google.com/store/apps/details?id=com.wewehao.aichat'
+                            : "https://apps.apple.com/app/id***",
+                      );
+                    },
+                  ),
                   renderItemWidget(
                     'images/star_icon.png',
                     Colors.amber,
@@ -160,7 +171,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                           commentHint: 'Set your custom comment hint',
                           onCancelled: () => print('cancelled'),
                           onSubmitted: (response) {
-                            print('rating: ${response.rating}, comment: ${response.comment}');
+                            print(
+                                'rating: ${response.rating}, comment: ${response.comment}');
                           },
                         ),
                       );
@@ -175,12 +187,14 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                       String recipientEmail = Config.contactEmail;
                       String subject = "${Config.appName} - feedback";
                       const String body = '';
-                      final url = 'mailto:$recipientEmail?subject=$subject&body=$body';
+                      final url =
+                          'mailto:$recipientEmail?subject=$subject&body=$body';
                       Utils.launchURL(
                         Uri.parse(url),
                         mode: LaunchMode.externalApplication,
                         onLaunchFail: () {
-                          Clipboard.setData(ClipboardData(text: recipientEmail));
+                          Clipboard.setData(
+                              ClipboardData(text: recipientEmail));
                           EasyLoading.showToast(
                             'Email address has been copied',
                             dismissOnTap: true,
@@ -189,28 +203,30 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                       );
                     },
                   ),
-                  renderItemWidget(
-                    'images/key_icon.png',
-                    Colors.lightGreen,
-                    26,
-                    'Customize OpenAI Key',
-                    () async {
-                      String cacheKey = ChatGPT.getCacheOpenAIKey();
-                      _keyTextEditingController.text = cacheKey;
-                      _showCustomOpenAIKeyDialog();
-                    },
-                  ),
-                  renderItemWidget(
-                    'images/url_icon.png',
-                    Colors.deepPurpleAccent,
-                    26,
-                    'Customize OpenAI Base URL',
-                    () async {
-                      String cacheUrl = ChatGPT.getCacheOpenAIBaseUrl();
-                      _urlTextEditingController.text = cacheUrl;
-                      _showCustomOpenAIUrlDialog();
-                    },
-                  ),
+                  if (Config.isDebug)
+                    renderItemWidget(
+                      'images/key_icon.png',
+                      Colors.lightGreen,
+                      26,
+                      'Customize OpenAI Key',
+                      () async {
+                        String cacheKey = ChatGPT.getCacheOpenAIKey();
+                        _keyTextEditingController.text = cacheKey;
+                        _showCustomOpenAIKeyDialog();
+                      },
+                    ),
+                  if (Config.isDebug)
+                    renderItemWidget(
+                      'images/url_icon.png',
+                      Colors.deepPurpleAccent,
+                      26,
+                      'Customize OpenAI Base URL',
+                      () async {
+                        String cacheUrl = ChatGPT.getCacheOpenAIBaseUrl();
+                        _urlTextEditingController.text = cacheUrl;
+                        _showCustomOpenAIUrlDialog();
+                      },
+                    ),
 
                   /// Empty storage
                   if (Config.isDebug)
@@ -221,7 +237,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                       'Debug: Clear Storage',
                       () {
                         ChatGPT.storage.erase();
-                        final store = Provider.of<AIChatStore>(context, listen: false);
+                        final store =
+                            Provider.of<AIChatStore>(context, listen: false);
                         store.syncStorage();
                         SpUtil.clear();
                         EasyLoading.showToast('Clear Storage Success!');
@@ -251,7 +268,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 18, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 18, bottom: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(width: 1, color: Colors.white),
@@ -286,7 +304,10 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 if (rightIconSrc != '')
@@ -327,7 +348,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
               TextField(
                 controller: _keyTextEditingController,
                 autofocus: true,
-                decoration: const InputDecoration(hintText: 'Please input your key'),
+                decoration:
+                    const InputDecoration(hintText: 'Please input your key'),
               ),
               const SizedBox(height: 12),
               GestureDetector(
@@ -450,7 +472,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
               TextField(
                 controller: _urlTextEditingController,
                 autofocus: true,
-                decoration: const InputDecoration(hintText: 'Please input your OpenAI host'),
+                decoration: const InputDecoration(
+                    hintText: 'Please input your OpenAI host'),
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -492,7 +515,8 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                ChatGPT.setOpenAIBaseUrl(_urlTextEditingController.text).then((_) {
+                ChatGPT.setOpenAIBaseUrl(_urlTextEditingController.text)
+                    .then((_) {
                   _urlTextEditingController.clear();
                   Navigator.of(context).pop(true);
                   EasyLoading.showToast(

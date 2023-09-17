@@ -10,9 +10,7 @@ class Utils {
   static Utils? _instance;
 
   static Utils _getInstance() {
-    if (_instance == null) {
-      _instance = Utils();
-    }
+    _instance ??= Utils();
     return _instance!;
   }
 
@@ -27,11 +25,21 @@ class Utils {
   static pushReplacement(BuildContext context, Widget widget) {
     PageRoute builder = PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 0),
-      pageBuilder: (BuildContext context, Animation<double> animation, Animation secondaryAnimation) {
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation secondaryAnimation) {
         return widget;
       },
     );
     Navigator.pushReplacement(context, builder);
+  }
+
+  static Future<T> jumpPageResult<T>(
+      BuildContext context, Widget widget) async {
+    PageRoute builder = MaterialPageRoute(builder: (context) {
+      return widget;
+    });
+
+    return await Navigator.push(context, builder);
   }
 
   /// Save whether to install for the first time
@@ -52,7 +60,7 @@ class Utils {
 
   static launchURL(
     Uri url, {
-    LaunchMode mode = LaunchMode.externalNonBrowserApplication,
+    LaunchMode mode = LaunchMode.platformDefault,
     Function? onLaunchFail,
   }) async {
     if (await canLaunchUrl(url)) {
