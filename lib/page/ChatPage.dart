@@ -37,7 +37,9 @@ class ChatPage extends StatefulWidget {
 
 enum TtsState { playing, stopped, paused, continued }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
+  late LottieBuilder _splashLottie;
+  late AnimationController _lottieController;
   static final LottieBuilder _generatingLottie =
       Lottie.asset("images/loading2.json");
 
@@ -119,12 +121,39 @@ class _ChatPageState extends State<ChatPage> {
     await _flutterTts.speak(text);
   }
 
+  void _lottieInit() {
+    _lottieController = AnimationController(
+      duration: const Duration(seconds: 4),
+      vsync: this,
+    );
+    _lottieController.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        _lottieController.repeat();
+
+      }
+    });
+    _splashLottie = Lottie.asset(
+      'images/ic_drawer_header.json',
+      repeat: false,
+      animate: false,
+      width: double.infinity,
+      height: double.infinity,
+      controller: _lottieController,
+      onLoaded: (composition) {
+        _isAnimateFileLoaded = true;
+        _lottieController.forward(from: 0);
+        _lottieController.duration = composition.duration;
+        setState(() {});
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
 
     initTts();
-
+    _lottieInit();
     // WidgetsBinding.instance.addPostFrameCallback((mag) {
     // print("页面渲染完毕");
     // scrollToBottom();
@@ -165,6 +194,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        centerTitle: true,
         toolbarHeight: 60,
         titleSpacing: 0,
         title: Row(
@@ -177,28 +207,39 @@ class _ChatPageState extends State<ChatPage> {
                 Scaffold.of(context).openDrawer();
               },
               child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            Text(
-                              "ChatAI",
-                              style: TextStyle(
-                                color: Color.fromRGBO(0, 0, 0, 1),
-                                fontSize: 18,
-                                height: 1,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 24),
-                          ],
+                  SizedBox(
+                    height: 60,
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(36),
+                            topRight: Radius.circular(36),
+                            bottomRight: Radius.circular(36),
+                            bottomLeft: Radius.circular(36),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Image(
+                            width: 36,
+                            height: 36,
+                            image: AssetImage("images/logo.png"),
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 5),
+                        Text(
+                          "RLYAI",
+                          style: TextStyle(
+                            color: Color.fromRGBO(0, 0, 0, 1),
+                            fontSize: 18,
+                            height: 1,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 24),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -238,11 +279,15 @@ class _ChatPageState extends State<ChatPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(),
+            DrawerHeader(
+              decoration: const BoxDecoration(),
               child: Row(
                 children: [
-                  Image(image: AssetImage('images/ic_header_drawer.png'))
+                  SizedBox(
+                    width: 260,
+                    height: 260,
+                    child: _splashLottie,
+                  )
                 ],
               ),
             ),
@@ -272,17 +317,11 @@ class _ChatPageState extends State<ChatPage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings, color: Config.mainColor),
-              title: const Text('Settings'),
+              leading: Icon(Icons.privacy_tip_sharp, color: Config.mainColor),
+              title: const Text('Privacy'),
               onTap: () {
-                Utils.jumpPage(context, const SettingPage());
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Config.mainColor),
-              title: const Text('Exit'),
-              onTap: () {
-                Navigator.pop(context);
+                final Uri url = Uri.parse(Config.privacyLink);
+                Utils.launchURL(url);
               },
             ),
           ],

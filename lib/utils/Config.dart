@@ -38,7 +38,8 @@ class Config {
   static double? headerBarFontSize = 24;
   static bool isInfiniteNumberVersion =
       true; // Unlimited frequency. Development and use
-  static String appName = 'ChatAI';
+  static String privacyLink = "https://ryltech.vn/rylai_privacy_policy.pdf";
+  static String appName = 'RYLAI';
   static String contactEmail = '895535702@qq.com';
   static int watchAdApiCount = 3;
   static int appUserAdCount =
