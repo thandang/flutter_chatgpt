@@ -2,6 +2,7 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class ChatGPT {
   static final ChatGPT _instance = ChatGPT._();
@@ -216,6 +217,12 @@ class ChatGPT {
       ],
     },
   ];
+
+  static Future<void>initFirebase() async {
+    await Firebase.initializeApp(
+      options: FirebaseOptions(apiKey: 'apiKey', appId: 'appId', messagingSenderId: 'messagingSenderId', projectId: 'projectId'),
+    );
+  }
 
   static Future<void> setOpenAIKey(String key) async {
     await storage.write('OpenAIKey', key);
