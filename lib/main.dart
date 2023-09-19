@@ -15,7 +15,7 @@ void main() async {
     statusBarColor: Colors.black,
   ));
   await dotenv.load(fileName: "env");
-
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await ChatGPT.initChatGPT();
   runApp(

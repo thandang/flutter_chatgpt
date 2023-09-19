@@ -1,5 +1,6 @@
 import 'package:aichat/components/QuestionInput.dart';
 import 'package:aichat/models/chatInfo.dart';
+import 'package:aichat/page/AboutPage.dart';
 import 'package:aichat/page/HomePage.dart';
 import 'package:aichat/page/SettingPage.dart';
 import 'package:aichat/utils/Chatgpt.dart';
@@ -42,7 +43,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   late AnimationController _lottieController;
   static final LottieBuilder _generatingLottie =
       Lottie.asset("images/loading2.json");
-
   final ScrollController _listController = ScrollController();
 
   late FlutterTts _flutterTts;
@@ -140,7 +140,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       height: double.infinity,
       controller: _lottieController,
       onLoaded: (composition) {
-        _isAnimateFileLoaded = true;
         _lottieController.forward(from: 0);
         _lottieController.duration = composition.duration;
         setState(() {});
@@ -322,6 +321,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               onTap: () {
                 final Uri url = Uri.parse(Config.privacyLink);
                 Utils.launchURL(url);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info, color: Config.mainColor),
+              title: const Text('About'),
+              onTap: () {
+                Utils.jumpPageResult(context, const AboutPage());
               },
             ),
           ],

@@ -51,31 +51,28 @@ android {
         versionName flutterVersionName
     }
 
-//    signingConfigs {
-//        release {
-//             storeFile file("./build_config/build.jks")
-//             storePassword "123456"
-//             keyAlias "key"
-//             keyPassword "123456"
-//        }
+    signingConfigs {
+        release {
+             storeFile file("../release-keystore.jks")
+             storePassword "Ryl@123!"
+             keyAlias "RYLAI"
+             keyPassword "Ryl@123!"
+        }
 //        debug {
 //            storeFile file("./build_config/build.jks")
 //            storePassword "123456"
 //            keyAlias "key"
 //            keyPassword "123456"
 //        }
-//    }
+    }
     buildTypes {
-//        release {
-//            signingConfig signingConfigs.release
-//            minifyEnabled true
-//        }
-//        debug {
-//            signingConfig signingConfigs.debug
-//            minifyEnabled false
-//        }
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+        }
+        debug {
             signingConfig signingConfigs.debug
+            minifyEnabled false
         }
     }
 }
