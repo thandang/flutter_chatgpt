@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "797908282946",
+    "firebase_url": "https://ryltech-ai-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ryltech-ai",
+    "storage_bucket": "ryltech-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797908282946:android:4f8a9a590f6bb41d9b47db",
+        "android_client_info": {
+          "package_name": "com.ryl.chatai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmYM2B7BgQcl-_8yHDKG4AOb0w2s0LZq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
