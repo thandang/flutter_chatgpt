@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ryl.chatai">
 
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+<!--    <uses-permission-->
+<!--        android:name="android.permission.QUERY_ALL_PACKAGES"-->
+<!--        tools:ignore="QueryAllPackagesPermission" />-->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -40,7 +40,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="AI Chat - Quickly experience">
+        android:label="RYLAI">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
